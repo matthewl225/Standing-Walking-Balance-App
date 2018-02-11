@@ -1,0 +1,13 @@
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.csprojResolveAssemblyReference.cache
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.FormBluetooth.resources
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.FormMain.resources
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.Properties.Resources.resources
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.csproj.GenerateResource.Cache
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.csproj.CoreCompileInputs.cache
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\bin\Debug\WiiBalanceWalker.exe.config
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\bin\Debug\WiiBalanceWalker.exe
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\bin\Debug\WiiBalanceWalker.pdb
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\bin\Debug\InTheHand.Net.Personal.dll
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\bin\Debug\WiimoteLib.dll
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.exe
+C:\Users\MatthewLee\Desktop\WiiBalanceWalker_v0.4\WiiBalanceWalker\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.pdb
