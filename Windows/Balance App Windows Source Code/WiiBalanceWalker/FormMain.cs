@@ -60,21 +60,21 @@ namespace WiiBalanceWalker
 
             // Load trigger settings.
 
-            numericUpDown_TLR.Value  = Properties.Settings.Default.TriggerLeftRight;
-            numericUpDown_TFB.Value  = Properties.Settings.Default.TriggerForwardBackward;
-            numericUpDown_TMLR.Value = Properties.Settings.Default.TriggerModifierLeftRight;
-            numericUpDown_TMFB.Value = Properties.Settings.Default.TriggerModifierForwardBackward;
+            //numericUpDown_TLR.Value  = Properties.Settings.Default.TriggerLeftRight;
+            //numericUpDown_TFB.Value  = Properties.Settings.Default.TriggerForwardBackward;
+            //numericUpDown_TMLR.Value = Properties.Settings.Default.TriggerModifierLeftRight;
+            //numericUpDown_TMFB.Value = Properties.Settings.Default.TriggerModifierForwardBackward;
 
             // Link up form controls with action settings.
 
-            actionList.Left          = new ActionItem("Left",          comboBox_AL,  numericUpDown_AL);
-            actionList.Right         = new ActionItem("Right",         comboBox_AR,  numericUpDown_AR);
-            actionList.Forward       = new ActionItem("Forward",       comboBox_AF,  numericUpDown_AF);
-            actionList.Backward      = new ActionItem("Backward",      comboBox_AB,  numericUpDown_AB);
-            actionList.Modifier      = new ActionItem("Modifier",      comboBox_AM,  numericUpDown_AM);
-            actionList.Jump          = new ActionItem("Jump",          comboBox_AJ,  numericUpDown_AJ);
-            actionList.DiagonalLeft  = new ActionItem("DiagonalLeft",  comboBox_ADL, numericUpDown_ADL);
-            actionList.DiagonalRight = new ActionItem("DiagonalRight", comboBox_ADR, numericUpDown_ADR);
+            //actionList.Left          = new ActionItem("Left",          comboBox_AL,  numericUpDown_AL);
+            //actionList.Right         = new ActionItem("Right",         comboBox_AR,  numericUpDown_AR);
+            //actionList.Forward       = new ActionItem("Forward",       comboBox_AF,  numericUpDown_AF);
+            //actionList.Backward      = new ActionItem("Backward",      comboBox_AB,  numericUpDown_AB);
+            //actionList.Modifier      = new ActionItem("Modifier",      comboBox_AM,  numericUpDown_AM);
+            //actionList.Jump          = new ActionItem("Jump",          comboBox_AJ,  numericUpDown_AJ);
+            //actionList.DiagonalLeft  = new ActionItem("DiagonalLeft",  comboBox_ADL, numericUpDown_ADL);
+            //actionList.DiagonalRight = new ActionItem("DiagonalRight", comboBox_ADR, numericUpDown_ADR);
 
             // Load joystick preference.
 
@@ -230,7 +230,7 @@ namespace WiiBalanceWalker
 
             var COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
-            var COPy = ((boardY / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
+            var COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
 
             var COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
@@ -253,6 +253,9 @@ namespace WiiBalanceWalker
 
             label1.Text = COGx.ToString("0.000");
             label2.Text = COGy.ToString("0.000");
+
+            label3.Text = COPx.ToString("0.000");
+            label4.Text = COPy.ToString("0.000");
 
             // Prevent negative values by tracking lowest possible value and making it a zero based offset.
 
@@ -330,13 +333,13 @@ namespace WiiBalanceWalker
 
             // Diagonal ratio used for turning on the spot.
 
-            var brDL = owrPercentage * (owBottomLeft + owTopRight);
-            var brDR = owrPercentage * (owBottomRight + owTopLeft);
-            var brDF = Math.Abs(brDL - brDR);
+            //var brDL = owrPercentage * (owBottomLeft + owTopRight);
+            //var brDR = owrPercentage * (owBottomRight + owTopLeft);
+            //var brDF = Math.Abs(brDL - brDR);
 
-            label_brDL.Text = brDL.ToString("0.0");
-            label_brDR.Text = brDR.ToString("0.0");
-            label_brDF.Text = brDF.ToString("0.0");
+            //label_brDL.Text = brDL.ToString("0.0");
+            //label_brDR.Text = brDR.ToString("0.0");
+            //label_brDF.Text = brDF.ToString("0.0");
 
             // Convert sensor values into actions.
 
@@ -372,11 +375,11 @@ namespace WiiBalanceWalker
 
             // Check for diagonal pressure only when no other movement actions are active.
 
-            if (!sendLeft && !sendRight && !sendForward && !sendBackward && brDF > 15)
-            {
-                if (brDL > brDR) sendDiagonalLeft  = true;
-                else             sendDiagonalRight = true;
-            }
+            //if (!sendLeft && !sendRight && !sendForward && !sendBackward && brDF > 15)
+            //{
+            //    if (brDL > brDR) sendDiagonalLeft  = true;
+            //    else             sendDiagonalRight = true;
+            //}
 
             // Display actions.
 
@@ -491,9 +494,6 @@ namespace WiiBalanceWalker
             actionList.DiagonalRight.Stop();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+ 
     }
 }

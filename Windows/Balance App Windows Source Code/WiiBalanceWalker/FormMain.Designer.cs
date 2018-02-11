@@ -58,7 +58,6 @@
             this.button_ResetDefaults = new System.Windows.Forms.Button();
             this.button_BluetoothAddDevice = new System.Windows.Forms.Button();
             this.groupBox_BalanceRatio = new System.Windows.Forms.GroupBox();
-            this.label_brDF = new System.Windows.Forms.Label();
             this.groupBox_BalanceRatioTriggers = new System.Windows.Forms.GroupBox();
             this.numericUpDown_TMFB = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_TMLR = new System.Windows.Forms.NumericUpDown();
@@ -96,6 +95,8 @@
             this.comboBox_AB = new System.Windows.Forms.ComboBox();
             this.comboBox_AR = new System.Windows.Forms.ComboBox();
             this.comboBox_AL = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox_RawWeight.SuspendLayout();
             this.groupBox_OffsetWeight.SuspendLayout();
             this.groupBox_OffsetWeightRatio.SuspendLayout();
@@ -313,7 +314,6 @@
             this.label1.Size = new System.Drawing.Size(39, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "COGx";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label_owrTL
             // 
@@ -406,7 +406,8 @@
             // 
             // groupBox_BalanceRatio
             // 
-            this.groupBox_BalanceRatio.Controls.Add(this.label_brDF);
+            this.groupBox_BalanceRatio.Controls.Add(this.label4);
+            this.groupBox_BalanceRatio.Controls.Add(this.label3);
             this.groupBox_BalanceRatio.Controls.Add(this.label_brX);
             this.groupBox_BalanceRatio.Controls.Add(this.label_brDR);
             this.groupBox_BalanceRatio.Controls.Add(this.label_brDL);
@@ -417,15 +418,6 @@
             this.groupBox_BalanceRatio.TabIndex = 5;
             this.groupBox_BalanceRatio.TabStop = false;
             this.groupBox_BalanceRatio.Text = "Balance Ratio";
-            // 
-            // label_brDF
-            // 
-            this.label_brDF.AutoSize = true;
-            this.label_brDF.Location = new System.Drawing.Point(76, 104);
-            this.label_brDF.Name = "label_brDF";
-            this.label_brDF.Size = new System.Drawing.Size(20, 12);
-            this.label_brDF.TabIndex = 0;
-            this.label_brDF.Text = "DF";
             // 
             // groupBox_BalanceRatioTriggers
             // 
@@ -920,6 +912,24 @@
             this.comboBox_AL.Size = new System.Drawing.Size(145, 20);
             this.comboBox_AL.TabIndex = 2;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(29, 104);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 12);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "COPx";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(118, 104);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "COPy";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -994,7 +1004,6 @@
         private System.Windows.Forms.Label label_owrBR;
         private System.Windows.Forms.GroupBox groupBox_General;
         private System.Windows.Forms.GroupBox groupBox_BalanceRatio;
-        private System.Windows.Forms.Label label_brDF;
         private System.Windows.Forms.GroupBox groupBox_BalanceRatioTriggers;
         private System.Windows.Forms.NumericUpDown numericUpDown_TMFB;
         private System.Windows.Forms.NumericUpDown numericUpDown_TMLR;
@@ -1039,6 +1048,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
     }
 }
 
