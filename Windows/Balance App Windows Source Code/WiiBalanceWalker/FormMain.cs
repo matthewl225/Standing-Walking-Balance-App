@@ -14,6 +14,8 @@ using System.Timers;
 using System.Windows.Forms;
 using VJoyLibrary;
 using WiimoteLib;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace WiiBalanceWalker
 {
