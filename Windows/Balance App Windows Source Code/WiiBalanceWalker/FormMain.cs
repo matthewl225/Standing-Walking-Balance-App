@@ -45,6 +45,8 @@ namespace WiiBalanceWalker
         float oaBottomLeft  = 0f;
         float oaBottomRight = 0f;
 
+        double COPx, COPy, COGx, COGy;
+
         public FormMain()
         {
             InitializeComponent();
@@ -230,13 +232,13 @@ namespace WiiBalanceWalker
             var rwBottomLeft = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft) / four) - blOffset;
             var rwBottomRight = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomRight) / four) - brOffset;
 
-            var COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
+            COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
-            var COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
+            COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
 
-            var COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
-            var COGy = (-1.0) * wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.Y;
+            COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
+            COGy = (-1.0) * wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.Y;
 
             // The alternative .SensorValuesRaw is not adjusted with 17KG and 34KG calibration data, but does that make for better or worse control?
             //

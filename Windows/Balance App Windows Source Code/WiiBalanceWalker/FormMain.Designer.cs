@@ -58,6 +58,8 @@
             this.button_ResetDefaults = new System.Windows.Forms.Button();
             this.button_BluetoothAddDevice = new System.Windows.Forms.Button();
             this.groupBox_BalanceRatio = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox_BalanceRatioTriggers = new System.Windows.Forms.GroupBox();
             this.numericUpDown_TMFB = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_TMLR = new System.Windows.Forms.NumericUpDown();
@@ -95,8 +97,8 @@
             this.comboBox_AB = new System.Windows.Forms.ComboBox();
             this.comboBox_AR = new System.Windows.Forms.ComboBox();
             this.comboBox_AL = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.copScatter1 = new WiiBalanceWalker.COPScatter();
             this.groupBox_RawWeight.SuspendLayout();
             this.groupBox_OffsetWeight.SuspendLayout();
             this.groupBox_OffsetWeightRatio.SuspendLayout();
@@ -418,6 +420,24 @@
             this.groupBox_BalanceRatio.TabIndex = 5;
             this.groupBox_BalanceRatio.TabStop = false;
             this.groupBox_BalanceRatio.Text = "Balance Ratio";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(118, 104);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(38, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "COPy";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(29, 104);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 12);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "COPx";
             // 
             // groupBox_BalanceRatioTriggers
             // 
@@ -912,29 +932,21 @@
             this.comboBox_AL.Size = new System.Drawing.Size(145, 20);
             this.comboBox_AL.TabIndex = 2;
             // 
-            // label3
+            // elementHost1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(29, 104);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 12);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "COPx";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(118, 104);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 12);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "COPy";
+            this.elementHost1.Location = new System.Drawing.Point(13, 299);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(722, 372);
+            this.elementHost1.TabIndex = 6;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.copScatter1;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1101, 307);
+            this.ClientSize = new System.Drawing.Size(1101, 683);
+            this.Controls.Add(this.elementHost1);
             this.Controls.Add(this.groupBox_Actions);
             this.Controls.Add(this.label_Status);
             this.Controls.Add(this.groupBox_BalanceRatioTriggers);
@@ -1050,6 +1062,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private COPScatter copScatter1;
     }
 }
 
