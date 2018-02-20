@@ -15,7 +15,9 @@ namespace WiiBalanceWalker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            FormMain mainForm = new FormMain();
+
+            Application.Run(mainForm);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace WiiBalanceWalker
         float oaBottomLeft  = 0f;
         float oaBottomRight = 0f;
 
-        double COPx, COPy, COGx, COGy;
+        double COGx, COGy;
 
         public FormMain()
         {
@@ -232,9 +232,9 @@ namespace WiiBalanceWalker
             var rwBottomLeft = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft) / four) - blOffset;
             var rwBottomRight = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomRight) / four) - brOffset;
 
-            COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
+            Globals.COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
-            COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
+            Globals.COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
 
             COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
@@ -258,8 +258,8 @@ namespace WiiBalanceWalker
             label1.Text = COGx.ToString("0.000");
             label2.Text = COGy.ToString("0.000");
 
-            label3.Text = COPx.ToString("0.000");
-            label4.Text = COPy.ToString("0.000");
+            label3.Text = Globals.COPx.ToString("0.000");
+            label4.Text = Globals.COPy.ToString("0.000");
 
             // Prevent negative values by tracking lowest possible value and making it a zero based offset.
 

@@ -16,11 +16,6 @@
         <lvc:CartesianChart Grid.Row="1" LegendLocation="Bottom">
             <lvc:CartesianChart.Series>
                 <lvc:ScatterSeries Title="Series A" Values="{Binding ValuesA}" />
-                <lvc:ScatterSeries Title="Series B" Values="{Binding ValuesB}"
-                                   PointGeometry="{x:Static lvc:DefaultGeometries.Diamond}" />
-                <lvc:ScatterSeries Title="Series C" Values="{Binding ValuesC}"
-                                   PointGeometry="{x:Static lvc:DefaultGeometries.Triangle}"
-                                   StrokeThickness="2" Fill="Transparent"/>
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="X Coordinates" 
