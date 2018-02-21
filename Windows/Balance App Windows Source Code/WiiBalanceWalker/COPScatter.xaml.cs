@@ -33,6 +33,8 @@ namespace WiiBalanceWalker
 
             YCoordinates = new[] { -100, -50, 0, 50, 100 };
 
+            IsReading = false;
+
             DataContext = this;
 
             
@@ -52,6 +54,12 @@ namespace WiiBalanceWalker
         const double boardYmax = 114;
 
         private void RandomizeOnClick(object sender, RoutedEventArgs e)
+        {
+            ValuesA[0].X = Globals.COPx;
+            ValuesA[0].Y = Globals.COPy;
+        }
+
+        public void Update()
         {
             ValuesA[0].X = Globals.COPx;
             ValuesA[0].Y = Globals.COPy;

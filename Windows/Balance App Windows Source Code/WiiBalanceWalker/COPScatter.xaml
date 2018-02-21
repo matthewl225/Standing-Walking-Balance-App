@@ -18,18 +18,18 @@
                 <lvc:ScatterSeries Title="Series A" Values="{Binding ValuesA}" />
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="X Coordinates" 
-                          MaxValue="{Binding boardXmax}"
-                          MinValue="{Binding boardXmin}"
-                          Labels="{Binding XCoordinates}"></lvc:Axis>
+                <lvc:Axis Title="X Coordinates"
+                          MinValue="-21.6"
+                          MaxValue="21.6"
+                          ></lvc:Axis>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
                 <!--setting the axis unit improved the labels rounding rule-->
                 <!--<lvc:Axis Unit="1"></lvc:Axis>-->
                 <lvc:Axis Title="Y Coordinates" 
-                          MaxValue="{Binding boardYmax}"
-                          MinValue="{Binding boardYmin}"
-                          Labels="{Binding YCoordinates}"></lvc:Axis>
+                          MinValue="-11.4"
+                          MaxValue="11.4"
+                          ></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
     </Grid>

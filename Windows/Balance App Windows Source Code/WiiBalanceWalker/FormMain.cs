@@ -240,6 +240,8 @@ namespace WiiBalanceWalker
             COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
             COGy = (-1.0) * wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.Y;
 
+            copScatter1.Update();
+
             // The alternative .SensorValuesRaw is not adjusted with 17KG and 34KG calibration data, but does that make for better or worse control?
             //
             //var rwTopLeft     = wiiDevice.WiimoteState.BalanceBoardState.SensorValuesRaw.TopLeft     - wiiDevice.WiimoteState.BalanceBoardState.CalibrationInfo.Kg0.TopLeft;
