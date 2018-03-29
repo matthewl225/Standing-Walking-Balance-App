@@ -9,6 +9,8 @@
 //----------------------------------------------------------------------------------------------------------------------+
 
 using System;
+using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
@@ -16,12 +18,15 @@ using VJoyLibrary;
 using WiimoteLib;
 using LiveCharts;
 using LiveCharts.Wpf;
+using LiveCharts.Defaults;
 
 namespace WiiBalanceWalker
 {
     public partial class FormMain : Form
-    {
+    {   
+        //0.05 second interval 20Hz
         System.Timers.Timer infoUpdateTimer = new System.Timers.Timer() { Interval = 50,     Enabled = false };
+        //240 second interval
         System.Timers.Timer joyResetTimer   = new System.Timers.Timer() { Interval = 240000, Enabled = false };
 
         ActionList actionList = new ActionList();
@@ -30,6 +35,8 @@ namespace WiiBalanceWalker
         VJoy joyDevice        = null;
 
         bool setCenterOffset = false;
+
+        
 
         // Used to zero out the WiiBoard
 
@@ -44,8 +51,7 @@ namespace WiiBalanceWalker
         float oaTopRight    = 0f;
         float oaBottomLeft  = 0f;
         float oaBottomRight = 0f;
-
-        double COGx, COGy;
+        
 
         public FormMain()
         {
@@ -61,6 +67,8 @@ namespace WiiBalanceWalker
             // Setup a timer which prevents a VJoy popup message.
 
             joyResetTimer.Elapsed += new ElapsedEventHandler(joyResetTimer_Elapsed);
+
+            Globals.TimerOn = false;
 
             // Load trigger settings.
 
@@ -82,32 +90,14 @@ namespace WiiBalanceWalker
 
             // Load joystick preference.
 
-            checkBox_EnableJoystick.Checked = Properties.Settings.Default.EnableJoystick;
+            Array.Clear(Globals.COGxArray, 0, 600);
+            Array.Clear(Globals.COGyArray, 0, 600);
+
+            Globals.TraceOn = false;
+
+            //checkBox_EnableJoystick.Checked = Properties.Settings.Default.EnableJoystick;
         }
 
-        private void numericUpDown_TLR_ValueChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TriggerLeftRight = (int)numericUpDown_TLR.Value;
-            Properties.Settings.Default.Save();
-        }
-
-        private void numericUpDown_TFB_ValueChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TriggerForwardBackward = (int)numericUpDown_TFB.Value;
-            Properties.Settings.Default.Save();
-        }
-
-        private void numericUpDown_TMLR_ValueChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TriggerModifierLeftRight = (int)numericUpDown_TMLR.Value;
-            Properties.Settings.Default.Save();
-        }
-
-        private void numericUpDown_TMFB_ValueChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TriggerModifierForwardBackward = (int)numericUpDown_TMFB.Value;
-            Properties.Settings.Default.Save();
-        }
 
         private void button_SetCenterOffset_Click(object sender, EventArgs e)
         {
@@ -227,20 +217,66 @@ namespace WiiBalanceWalker
 
             var rwWeight = wiiDevice.WiimoteState.BalanceBoardState.WeightKg - weightOffset;
 
-            var rwTopLeft = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.TopLeft) / four ) - tlOffset;
+            var rwTopLeft = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.TopLeft) / four) - tlOffset;
             var rwTopRight = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.TopRight) / four) - trOffset;
             var rwBottomLeft = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft) / four) - blOffset;
             var rwBottomRight = ((wiiDevice.WiimoteState.BalanceBoardState.SensorValuesKg.BottomRight) / four) - brOffset;
 
-            Globals.COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
+
+
+            /*Globals.COPx = ((boardX / 2.0) * ((rwTopRight + rwBottomRight) - (rwTopLeft + rwBottomLeft))
                 / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
             Globals.COPy = ((boardY / 2.0) * ((rwTopRight + rwTopLeft) - (rwBottomLeft + rwBottomRight))
-                / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;
+                / (rwTopRight + rwBottomRight + rwTopLeft + rwBottomLeft))/10.0;*/
 
-            COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
-            COGy = (-1.0) * wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.Y;
+            Globals.COGx = wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.X;
+            Globals.COGy = (-1.0) * wiiDevice.WiimoteState.BalanceBoardState.CenterOfGravity.Y;
 
-            copScatter1.Update();
+            //start at the end COGxArray[599] (COGxArray is all initialized to 0)
+            //shift to left by one
+            Array.Copy(Globals.COGxArray, 1, Globals.COGxArray, 0, 599);
+            Globals.COGxArray[599] = Globals.COGx;
+
+            Array.Copy(Globals.COGyArray, 1, Globals.COGyArray, 0, 599);
+            Globals.COGyArray[599] = Globals.COGy;
+
+
+
+            Array.Copy(Globals.TLArray, 1, Globals.TLArray, 0, 599);
+            Globals.TLArray[599] = rwTopLeft;
+
+            Array.Copy(Globals.BLArray, 1, Globals.BLArray, 0, 599);
+            Globals.BLArray[599] = rwBottomLeft;
+
+            Array.Copy(Globals.TRArray, 1, Globals.TRArray, 0, 599);
+            Globals.TRArray[599] = rwTopRight;
+
+            Array.Copy(Globals.BRArray, 1, Globals.BRArray, 0, 599);
+            Globals.BRArray[599] = rwBottomRight;
+
+
+
+            if (Globals.TimerOn)
+            {
+                Globals.Period--;
+                if (Globals.Period == 0)
+                {
+                    print();
+                    Globals.TimerOn = false;
+                    button3.Text = "Start";
+                }
+            }
+
+            //only trace the last 100 (599~500);
+
+            //copScatter1.Update();
+            if (Globals.TraceOn) {
+                copScatter1.ValuesA.Add(new ObservablePoint(Globals.COGx, Globals.COGy));
+                if (copScatter1.ValuesA.Count > 50) copScatter1.ValuesA.RemoveAt(0);
+            }
+            copScatter1.ValuesB[0].X = Globals.COGx;
+            copScatter1.ValuesB[0].Y = Globals.COGy;
+            copScatter1.ValuesB[0].Weight = 1;
 
             // The alternative .SensorValuesRaw is not adjusted with 17KG and 34KG calibration data, but does that make for better or worse control?
             //
@@ -257,11 +293,11 @@ namespace WiiBalanceWalker
             label_rwBL.Text = rwBottomLeft.ToString("0.000");
             label_rwBR.Text = rwBottomRight.ToString("0.000");
 
-            label1.Text = COGx.ToString("0.000");
-            label2.Text = COGy.ToString("0.000");
+            label1.Text = Globals.COGx.ToString("0.000");
+            label2.Text = Globals.COGy.ToString("0.000");
 
-            label3.Text = Globals.COPx.ToString("0.000");
-            label4.Text = Globals.COPy.ToString("0.000");
+            //label3.Text = Globals.COPx.ToString("0.000");
+            //label4.Text = Globals.COPy.ToString("0.000");
 
             // Prevent negative values by tracking lowest possible value and making it a zero based offset.
 
@@ -293,7 +329,7 @@ namespace WiiBalanceWalker
                 oaBottomRight = rwHighest - rwBottomRight;
             }
 
-            // Keep values only when board is being used, otherwise offsets and small value jitters can trigger unwanted actions.
+            /*// Keep values only when board is being used, otherwise offsets and small value jitters can trigger unwanted actions.
 
             if (owWeight > 0f)
             {
@@ -335,110 +371,8 @@ namespace WiiBalanceWalker
             var brY = owrBottomRight + owrBottomLeft;
 
             label_brX.Text = brX.ToString("0.0");
-            label_brY.Text = brY.ToString("0.0");
-
-            // Diagonal ratio used for turning on the spot.
-
-            //var brDL = owrPercentage * (owBottomLeft + owTopRight);
-            //var brDR = owrPercentage * (owBottomRight + owTopLeft);
-            //var brDF = Math.Abs(brDL - brDR);
-
-            //label_brDL.Text = brDL.ToString("0.0");
-            //label_brDR.Text = brDR.ToString("0.0");
-            //label_brDF.Text = brDF.ToString("0.0");
-
-            // Convert sensor values into actions.
-
-            var sendLeft          = false;
-            var sendRight         = false;
-            var sendForward       = false;
-            var sendBackward      = false;
-            var sendModifier      = false;
-            var sendJump          = false;
-            var sendDiagonalLeft  = false;
-            var sendDiagonalRight = false;
-
-            if (brX < (float)(50 - numericUpDown_TLR.Value)) sendLeft     = true;
-            if (brX > (float)(50 + numericUpDown_TLR.Value)) sendRight    = true;
-            if (brY < (float)(50 - numericUpDown_TFB.Value)) sendForward  = true;
-            if (brY > (float)(50 + numericUpDown_TFB.Value)) sendBackward = true;
-
-            if      (brX < (float)(50 - numericUpDown_TMLR.Value)) sendModifier = true;
-            else if (brX > (float)(50 + numericUpDown_TMLR.Value)) sendModifier = true;
-            else if (brY < (float)(50 - numericUpDown_TMFB.Value)) sendModifier = true;
-            else if (brY > (float)(50 + numericUpDown_TMFB.Value)) sendModifier = true;
-
-            // Detect jump but use a time limit to stop it being active while off the board.
-
-            if (owWeight < 1f)
-            {
-                if (DateTime.UtcNow.Subtract(jumpTime).Seconds < 2) sendJump = true;
-            }
-            else
-            {
-                jumpTime = DateTime.UtcNow;
-            }
-
-            // Check for diagonal pressure only when no other movement actions are active.
-
-            //if (!sendLeft && !sendRight && !sendForward && !sendBackward && brDF > 15)
-            //{
-            //    if (brDL > brDR) sendDiagonalLeft  = true;
-            //    else             sendDiagonalRight = true;
-            //}
-
-            // Display actions.
-
-            label_Status.Text = "Result: ";
-
-            if (sendForward)       label_Status.Text += "Forward";
-            if (sendLeft)          label_Status.Text += "Left";
-            if (sendBackward)      label_Status.Text += "Backward";
-            if (sendRight)         label_Status.Text += "Right";
-            if (sendModifier)      label_Status.Text += " + Modifier";
-            if (sendJump)          label_Status.Text += "Jump";
-            if (sendDiagonalLeft)  label_Status.Text += "Diagonal Left";
-            if (sendDiagonalRight) label_Status.Text += "Diagonal Right";
-
-            if (checkBox_DisableActions.Checked) label_Status.Text += " ( DISABLED )";
-
-            // Send actions.
-
-            if (!checkBox_DisableActions.Checked)
-            {
-                if (sendLeft)          actionList.Left.Start();          else actionList.Left.Stop();
-                if (sendRight)         actionList.Right.Start();         else actionList.Right.Stop();
-                if (sendForward)       actionList.Forward.Start();       else actionList.Forward.Stop();
-                if (sendBackward)      actionList.Backward.Start();      else actionList.Backward.Stop();
-                if (sendModifier)      actionList.Modifier.Start();      else actionList.Modifier.Stop();
-                if (sendJump)          actionList.Jump.Start();          else actionList.Jump.Stop();
-                if (sendDiagonalLeft)  actionList.DiagonalLeft.Start();  else actionList.DiagonalLeft.Stop();
-                if (sendDiagonalRight) actionList.DiagonalRight.Start(); else actionList.DiagonalRight.Stop();
-            }
-
-            // Update joystick emulator.
-
-            if (checkBox_EnableJoystick.Checked)
-            {
-                // Uses Int16 ( -32767 to +32767 ) where 0 is the center. Multiplied by 2 because realistic usage is between the 30-70% ratio.
-
-                var joyX = (brX * 655.34 + -32767.0) * 2.0;
-                var joyY = (brY * 655.34 + -32767.0) * 2.0;
-
-                // Limit values to Int16, you cannot just (cast) or Convert.ToIn16() as the value '+ - sign' may invert.
-
-                if (joyX < short.MinValue) joyX = short.MinValue;
-                if (joyY < short.MinValue) joyY = short.MinValue;
-
-                if (joyX > short.MaxValue) joyX = short.MaxValue;
-                if (joyY > short.MaxValue) joyY = short.MaxValue;
-                
-                // Set new values.
-                
-                joyDevice.SetXAxis(0, (short)joyX);
-                joyDevice.SetYAxis(0, (short)joyY);
-                joyDevice.Update(0);
-            }
+            label_brY.Text = brY.ToString("0.0");*/
+            
         }
 
         private void checkBox_EnableJoystick_CheckedChanged(object sender, EventArgs e)
@@ -500,6 +434,150 @@ namespace WiiBalanceWalker
             actionList.DiagonalRight.Stop();
         }
 
- 
+        private void groupBox_OffsetWeight_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        //pause
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (infoUpdateTimer.Enabled == true)
+            {
+                button2.Text = "Resume";
+                infoUpdateTimer.Enabled = false;
+            }
+            else
+            {
+                button2.Text = "Pause";
+                infoUpdateTimer.Enabled = true;
+            }
+            
+        }
+
+        //start button
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(Globals.TimerOn == true)
+            {
+                print();
+                Globals.TimerOn = false;
+                button3.Text = "Start";
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(textBox1.Text))
+                {
+
+                    //MAX 30 SECONDS
+                    int parsedInt = 0;
+                    if (int.TryParse(textBox1.Text, out parsedInt))
+                    {
+                        Globals.TimerOn = true;
+                        button3.Text = "Stop";
+                        //infoUpdateTimer.Enabled = true;
+                        Globals.Time = parsedInt;
+                        Globals.Period = parsedInt * 20; //20Hz
+                        //maybe change to 20
+                    }
+
+
+
+                }
+            }
+           
+            /*if (infoUpdateTimer.Enabled == true)
+            {
+                //stopped
+                button3.Text = "Start";
+                infoUpdateTimer.Enabled = false;
+                print();
+                Array.Clear(Globals.COGxArray, 0, 600);
+                Array.Clear(Globals.COGyArray, 0, 600);
+
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(textBox1.Text))
+                {
+                    
+                    //MAX 30 SECONDS
+                    int parsedInt = 0;
+                    if (int.TryParse(textBox1.Text, out parsedInt))
+                    {
+                        button3.Text = "Stop";
+                        infoUpdateTimer.Enabled = true;
+                        Globals.Time = parsedInt;
+                        Globals.Period = parsedInt * 50;
+                    }
+                    
+
+                    
+                }
+            }*/
+            
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //need to (check Time * 50) - Period to see how much of the last whatever values we do need to print out
+            print();
+        }
+
+        private void print()
+        {
+            string strFilePath = @"C:\testfile.csv";
+            string strSeperator = ",";
+            StringBuilder sbOutput = new StringBuilder();
+
+            /*int[][] inaOutput = new int[][]{
+                new int[]{1000, 2000, 3000, 4000, 5000},
+                new int[]{6000, 7000, 8000, 9000, 10000},
+                new int[]{11000, 12000, 13000, 14000, 15000}
+            };*/
+            String[] headers = { "Time (seconds)", "COGx (cm)", "COGy (cm)", "TL (kgf)", "BL (kgf)", "TR (kgf)", "BR (kgf)" };
+            sbOutput.AppendLine(string.Join(strSeperator, headers));
+            double[] OutputRow = { 0, 0, 0, 0, 0, 0, 0 };
+
+            //int ilength = inaOutput.GetLength(0);
+            int j = 0;
+            for (int i = 600 - (Globals.Time * 20) + Globals.Period; i < 600; i++){
+                OutputRow[0] = 0.05 * j;
+                OutputRow[1] = Globals.COGxArray[i];
+                OutputRow[2] = Globals.COGyArray[i];
+                OutputRow[3] = Globals.TLArray[i];
+                OutputRow[4] = Globals.BLArray[i];
+                OutputRow[5] = Globals.TRArray[i];
+                OutputRow[6] = Globals.BRArray[i];
+
+                sbOutput.AppendLine(string.Join(strSeperator, OutputRow));
+                j++;
+            }
+
+
+
+            // Create and write the csv file
+            File.WriteAllText(strFilePath, sbOutput.ToString());
+
+            // To append more lines to the csv file
+            File.AppendAllText(strFilePath, sbOutput.ToString());
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (Globals.TraceOn)
+            {
+                Globals.TraceOn = false;
+                while(copScatter1.ValuesA.Count > 0)
+                {
+                    copScatter1.ValuesA.RemoveAt(0);
+                }
+
+            } else
+            {
+                Globals.TraceOn = true;
+            }
+        }
     }
 }

@@ -35,3 +35,7 @@ C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Win
 C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker_MarkupCompile.lref
 C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\obj\x86\Debug\COPScatter.baml
 C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.g.resources
+C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\bin\Debug\WiiBalanceWalker.exe.manifest
+C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\bin\Debug\WiiBalanceWalker.application
+C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.exe.manifest
+C:\Users\MatthewLee\Desktop\Standing-Walking-Balance-App\Windows\Balance App Windows Source Code\WiiBalanceWalker\obj\x86\Debug\WiiBalanceWalker.application

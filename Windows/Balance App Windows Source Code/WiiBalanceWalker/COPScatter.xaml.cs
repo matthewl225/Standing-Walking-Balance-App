@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Configurations;
+using LiveCharts.Wpf;
+using System.Windows.Media;
 
 namespace WiiBalanceWalker
 {
@@ -24,10 +26,29 @@ namespace WiiBalanceWalker
 
             var r = new Random();
             ValuesA = new ChartValues<ObservablePoint>();
-            //ValuesB = new ChartValues<ObservablePoint>();
+            ValuesB = new ChartValues<ScatterPoint>();
             //ValuesC = new ChartValues<ObservablePoint>();
 
-            ValuesA.Add(new ObservablePoint(Globals.COPx, Globals.COPy));
+            //MAKE THE WEIGHTS REALLY SMALL MAYBE ENOUGH DOTS WILL LOOK LIKE LINE
+            
+            ValuesA.Add(new ObservablePoint(Globals.COGx, Globals.COGy));
+                
+            
+            
+            ValuesB.Add(new ScatterPoint(Globals.COGx, Globals.COGy, 1));
+
+            var lineSeries = new LineSeries
+            {
+                Values = ValuesA,
+                StrokeThickness = 4,
+                Fill = Brushes.Transparent,
+                PointGeometrySize = 0,
+                //DataLabels = true
+
+            };
+
+            SeriesCollection = new SeriesCollection { lineSeries };
+            DataContext = this;
 
             XCoordinates = new[] { -200, -150, -100, -50, 0, 50, 100, 150, 200 };
 
@@ -42,8 +63,10 @@ namespace WiiBalanceWalker
         }
 
         public ChartValues<ObservablePoint> ValuesA { get; set; }
-        public ChartValues<ObservablePoint> ValuesB { get; set; }
-        public ChartValues<ObservablePoint> ValuesC { get; set; }
+        public ChartValues<ScatterPoint> ValuesB { get; set; }
+        public SeriesCollection SeriesCollection { get; set; }
+        public LineSeries lineSeries { get; set; }
+        //public ChartValues<ScatterPoint> ValuesC { get; set; }
 
         public int[] XCoordinates { get; set; }
         public int[] YCoordinates { get; set; }
@@ -53,23 +76,29 @@ namespace WiiBalanceWalker
         const double boardYmin = -114;
         const double boardYmax = 114;
 
-        private void RandomizeOnClick(object sender, RoutedEventArgs e)
-        {
-            ValuesA[0].X = Globals.COPx;
-            ValuesA[0].Y = Globals.COPy;
-        }
-
         public void Update()
         {
-            ValuesA[0].X = Globals.COPx;
-            ValuesA[0].Y = Globals.COPy;
+            /*for(var i = 0; i < 100; i++)
+            {
+                ValuesA[i].X = Globals.COGxArray[500 + i];
+                ValuesA[i].Y = Globals.COGyArray[500 + i];
+                ValuesA[i].Weight = 0.0001;
+            }*/
+
+            ValuesA.Add(new ObservablePoint(Globals.COGx, Globals.COGy));
+            if (ValuesA.Count > 50) ValuesA.RemoveAt(0);
+            //ValuesA[0].X = Globals.COPx;
+            //ValuesA[0].Y = Globals.COPy;
+            ValuesB[0].X = Globals.COGx;
+            ValuesB[0].Y = Globals.COGy;
+            ValuesB[0].Weight = 1;
         }
 
         public bool IsReading { get; set; }
 
         private void Read()
         {
-            var r = new Random();
+            //var r = new Random();
 
             while (IsReading)
             {
@@ -78,8 +107,13 @@ namespace WiiBalanceWalker
 
                 //_trend += r.Next(-8, 10);
 
-                ValuesA[0].X = Globals.COPx;
-                ValuesA[0].Y = Globals.COPy;
+                ValuesA.Add(new ObservablePoint(Globals.COGx, Globals.COGy));
+                if (ValuesA.Count > 50) ValuesA.RemoveAt(0);
+                //ValuesA[0].X = Globals.COPx;
+                //ValuesA[0].Y = Globals.COPy;
+                ValuesB[0].X = Globals.COGx;
+                ValuesB[0].Y = Globals.COGy;
+                ValuesB[0].Weight = 1;
 
                 //lets only use the last 150 values
                 //if (ChartValues.Count > 150) ChartValues.RemoveAt(0);
